@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El Oscilador</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: radial-gradient(circle, #0a0a0a, #111);
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #c9a0dc;
+      text-shadow: 0 0 5px #c9a0dc80;
+    }
+
+    button {
+      background-color: #c9a0dc;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      color: #111;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .mensaje {
+      margin-top: 40px;
+      font-size: 22px;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .contradiccion {
+      color: #ff4d4d;
+      font-weight: bold;
+      display: inline-block;
+      animation: glitch 1.2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 red, -2px 0 blue; }
+      20% { text-shadow: -2px 0 red, 2px 0 blue; }
+      40% { text-shadow: 2px 2px red, -2px -2px blue; }
+      60% { text-shadow: -2px -2px red, 2px 2px blue; }
+      80% { text-shadow: 2px 0 red, -2px 0 blue; }
+      100% { text-shadow: 0 0 red, 0 0 blue; }
+    }
+
+    .ia {
+      opacity: 0;
+      margin-top: 30px;
+      width: 100px;
+      height: 100px;
+      background-image: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif'); /* IA glitchy */
+      background-size: cover;
+      border-radius: 50%;
+      filter: contrast(200%) brightness(150%);
+      transition: opacity 1.2s ease-in-out;
+      animation: flotacion 4s ease-in-out infinite;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+
+    @keyframes flotacion {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌘 El Oscilador 🌒</h1>
+  <button onclick="generarOscilacion()">Pregúntale</button>
+  <div class="mensaje" id="mensaje"></div>
+  <div class="ia" id="ia"></div>
+
+  <script>
+    let afirmaciones = [
+      "Te va a encantar esta serie.",
+      "Deberías intentar escribir eso que llevas tiempo posponiendo.",
+      "Este libro es justo lo que necesitas ahora.",
+      "Salir a caminar sería perfecto para despejar tu mente.",
+      "Dale play, no te vas a arrepentir.",
+      "Mándale ese mensaje.",
+      "Hazlo ya, este es el momento.",
+      "Sí, eso que pensaste primero, eso es."
+    ];
+
+    const dudas = [
+      "Aunque… ¿no estás buscando placer instantáneo otra vez?",
+      "Pero también podrías aprovechar ese tiempo para estar en silencio, ¿no?",
+      "Aunque quizá solo lo quieres para evitar enfrentarte a lo que realmente sientes.",
+      "¿Y si en realidad ya estás repitiendo el mismo patrón?",
+      "¿No será una excusa más para no tomar una decisión real?",
+      "Aunque también podrías no hacer nada… y simplemente quedarte contigo.",
+      "Pero quizás lo que necesitas no es hacer, sino dejar de hacer.",
+      "¿Y si eso solo te distrae de lo que realmente te duele?"
+    ];
+
+    // Aprendizaje simple con memoria local
+    let historial = [];
+
+    function generarOscilacion() {
+      const mensaje = document.getElementById("mensaje");
+      const ia = document.getElementById("ia");
+
+      // Filtrar afirmaciones ya usadas
+      const disponibles = afirmaciones.filter(a => !historial.includes(a));
+
+      if (disponibles.length === 0) {
+        historial = []; // reiniciar memoria si se agotaron
+      }
+
+      const afirm = disponibles[Math.floor(Math.random() * disponibles.length)];
+      const duda = dudas[Math.floor(Math.random() * dudas.length)];
+
+      historial.push(afirm);
+
+      mensaje.innerHTML = afirm;
+      ia.classList.remove("visible");
+
+      setTimeout(() => {
+        mensaje.innerHTML = afirm + "<br><br><span class='contradiccion'>" + duda + "</span>";
+        ia.classList.add("visible");
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
